@@ -1,0 +1,13 @@
+
+/* Set default font */
+body {
+    font-family: "Inter", sans-serif;
+}
+
+/* Adjust Material button min-width for better responsiveness with Bootstrap */
+.mat-mdc-button, .mat-mdc-stroked-button, .mat-mdc-flat-button, .mat-mdc-raised-button {
+    min-width: unset !important;
+    padding: 0.625rem 1.25rem !important; /* Adjust padding to match btn-lg roughly */
+    line-height: 1.5 !important; /* Adjust line-height to match btn-lg */
+    height: auto !important; /* Allow height to adjust based on padding */
+}
