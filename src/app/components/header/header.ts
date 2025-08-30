@@ -42,7 +42,7 @@ export class Header implements OnInit, OnDestroy {
     if (url === '/' || url === '') {
       this.currentBgClass = 'bg-white';
       this.isLoginPage = false;
-    } else if (url === '/login' || url === '/signup') {
+    } else if (url === '/login' || url === '/signup' || url === '/add-video') {
       this.currentBgClass = 'bg-red';
       this.isLoginPage = true;
     } else {

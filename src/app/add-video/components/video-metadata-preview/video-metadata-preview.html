@@ -1,0 +1,105 @@
+<div class="metadata-preview">
+  <div class="preview-header">
+    <h3>Video Preview</h3>
+    <p>Review and edit the video details before saving</p>
+  </div>
+
+  <form [formGroup]="metadataForm" (ngSubmit)="onSave()" class="metadata-form">
+    
+    <!-- Thumbnail Preview -->
+    <div class="thumbnail-section">
+      <label class="form-label">Thumbnail</label>
+      <div class="thumbnail-container">
+        <img 
+          [src]="thumbnailControl?.value || metadata.thumbnail" 
+          [alt]="titleControl?.value || 'Video thumbnail'"
+          class="thumbnail-image"
+          (error)="onImageError($event)"
+        />
+        <div class="thumbnail-info">
+          <small class="text-muted">Current thumbnail from YouTube</small>
+          <!-- Future enhancement: Add thumbnail upload option -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Title Field -->
+    <div class="form-group">
+      <label for="title" class="form-label">
+        Title <span class="required">*</span>
+        <span class="char-count">{{ getCharacterCount('title') }}/200</span>
+      </label>
+      
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Enter video title"
+        class="form-input"
+        [class.error]="showTitleError"
+      />
+      
+      <div *ngIf="showTitleError" class="error-message">
+        {{ titleErrorMessage }}
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="description" class="form-label">
+        Description
+        <span class="char-count">{{ getCharacterCount('description') }}/1000</span>
+      </label>
+      
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Enter video description (optional)"
+        class="form-textarea"
+        rows="4"
+        [class.error]="showDescriptionError"
+      ></textarea>
+      
+      <div *ngIf="showDescriptionError" class="error-message">
+        {{ descriptionErrorMessage }}
+      </div>
+    </div>
+
+    <!-- Video Info (Read-only) -->
+    <div class="video-info" *ngIf="metadata.duration || metadata.publishedAt">
+      <div class="info-row" *ngIf="metadata.duration">
+        <span class="info-label">Duration:</span>
+        <span class="info-value">{{ metadata.duration }}</span>
+      </div>
+      <div class="info-row" *ngIf="metadata.publishedAt">
+        <span class="info-label">Published:</span>
+        <span class="info-value">{{ metadata.publishedAt | date:'mediumDate' }}</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="isSaving"
+      >
+        Cancel
+      </button>
+      
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="metadataForm.invalid || isSaving"
+        style="background-color: #C41E3A; color: white;"
+      >
+        <span *ngIf="!isSaving">Save Video</span>
+        <span *ngIf="isSaving" class="loading-text">
+          <span class="spinner"></span>
+          Saving...
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<div class="add-video-form">
+  <div class="form-header">
+    <h2>Add New Video</h2>
+    <p>Enter a YouTube URL to fetch and preview video details</p>
+  </div>
+
+  <form [formGroup]="videoForm" (ngSubmit)="onFetchMetadata()" class="url-form">
+    <div class="form-group">
+      <label for="url" class="form-label">
+        YouTube URL <span class="required">*</span>
+      </label>
+      
+      <div class="input-wrapper">
+        <input
+          id="url"
+          type="url"
+          formControlName="url"
+          placeholder="https://www.youtube.com/watch?v=..."
+          class="form-input"
+          [class.error]="showUrlError"
+          (input)="onUrlChange()"
+        />
+        
+        <button
+          type="submit"
+          class="fetch-btn"
+          [disabled]="isLoading || videoForm.invalid"
+        >
+          <span *ngIf="!isLoading">Fetch Details</span>
+          <span *ngIf="isLoading" class="loading-text">
+            <span class="spinner"></span>
+            Fetching...
+          </span>
+        </button>
+      </div>
+
+      <!-- Error Messages -->
+      <div *ngIf="showUrlError" class="error-message">
+        {{ urlErrorMessage }}
+      </div>
+    </div>
+  </form>
+</div>
