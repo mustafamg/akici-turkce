@@ -1,0 +1,32 @@
+.text-sm{
+    font-size: 0.875rem;
+    line-height: calc(1.25 / .875);
+}
+
+.w-8{
+    width: calc(0.25rem * 8);
+}
+
+.h-8{
+    height: calc(0.25rem * 8);
+}
+
+.text-black{
+    color: #000000;
+}
+
+.bg-beige {
+    background-color: #F8F4E6 !important;
+}
+
+.bg-white {
+    background-color: white !important;
+}
+
+.bg-red {
+    background-color: #C41E3A !important;
+}
+
+.text-red {
+    color: #C41E3A !important;
+}
