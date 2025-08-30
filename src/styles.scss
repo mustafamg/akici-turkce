@@ -1,0 +1,96 @@
+
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+// Custom red palette based on #C41E3A
+$red-palette: (
+  50: #fbe8e8,
+  100: #f6c5c5,
+  200: #f19e9e,
+  300: #eb7777,
+  400: #e75a5a,
+  500: #e23d3d, // Main red color
+  600: #de3737,
+  700: #d92f2f,
+  800: #d52727,
+  900: #cd1a1a,
+  A100: #ffffff,
+  A200: #ffd6d6,
+  A400: #ffa3a3,
+  A700: #ff8a8a,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  )
+);
+
+html {
+  @include mat.theme((
+    color: (
+      primary: $red-palette,
+      tertiary: $red-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+}
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+/* Custom red theme variables */
+:root {
+  --primary-red: #C41E3A;
+  --primary-red-light: rgba(196, 30, 58, 0.1);
+  --primary-red-medium: rgba(196, 30, 58, 0.2);
+  --primary-red-dark: #A0182E;
+}
+
+.bg-primary-red {
+  background-color: var(--primary-red) !important;
+}
+
+.text-primary-red {
+  color: var(--primary-red) !important;
+}
+
+.border-primary-red {
+  border-color: var(--primary-red) !important;
+}
