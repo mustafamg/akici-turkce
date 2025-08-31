@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from 'src/categories/entities/category.entity';
 
 export enum Difficulty {
@@ -33,8 +33,14 @@ export class Video {
     @Column()
     difficulty: Difficulty;
 
-    @ManyToOne(() => Category, (Category) => Category.videos)
-    category: Category;
+    @Column({ default: false })
+    isFeatured: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @Column({ default: 0 })
+    views: number;
 
     @ManyToMany(() => Category, (category) => category.videoss)
     categories: Category[];

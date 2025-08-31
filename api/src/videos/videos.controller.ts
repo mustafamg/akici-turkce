@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, ParseIntPipe, Query } from '@nestjs/common';
 import { CreateVideoDto } from './dto/create-video.dto'
 import { UpdateVideoDto } from './dto/update-video.dto'
 import { VideosService } from './videos.service';
 import * as videosEntity from './entities/video.entity'
+import { GetVideoDto } from './dto/get-video.dto';
 
 @Controller('videos')
 export class VideosController {
@@ -20,9 +21,9 @@ export class VideosController {
     return this.videosService.update(id, updateVideoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.videosService.findAll();
+ @Get()
+  async findAll(@Query() getVideosDto: GetVideoDto) {
+    return this.videosService.findAll(getVideosDto);
   }
 
   @Get(':id')
