@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Video } from '../models/video'
 
 @Injectable({
@@ -13,7 +13,15 @@ export class VideoService {
    constructor(private httpClient:HttpClient) {}
 
  getFeaturedVideos(): Observable<Video[]> {
-  return this.httpClient.get<Video[]>(this.apiUrl);
+   const params = new HttpParams()
+      .set('isFeatured', 'false') 
+      .set('sort', 'views')
+      .set('order', 'DESC')
+      .set('limit', '4'); 
+
+    return this.httpClient.get<{ items: Video[] }>(this.apiUrl, { params }).pipe(
+      map(response => response.items) 
+    );
 
  }
 }

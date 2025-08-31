@@ -20,11 +20,10 @@ export class Home implements OnInit {
   videos: Video[] = [];
   hasError: boolean = false;
   errorMessage: string = '';
-  lastVisitedId: number = 0;
 
-  constructor(private route: ActivatedRoute, private videoService: VideoService) {}
+  constructor(private videosService: VideoService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const storedVideos = localStorage.getItem('featuredVideos');
 
     if (storedVideos) {
@@ -32,26 +31,31 @@ export class Home implements OnInit {
       this.videos = JSON.parse(storedVideos);
     } else {
       
-      this.videoService.getFeaturedVideos()
-        .pipe(
-          tap(data => {
-            this.hasError = false;
-            this.errorMessage = '';
-            this.videos = data;
-            
-            localStorage.setItem('featuredVideos', JSON.stringify(data));
-          }),
-          catchError(error => {
-            this.hasError = true;
-            this.errorMessage = 'Failed to load videos data: ' + error.message;
-            return EMPTY;
-          }),
-          switchMap(() => this.route.paramMap),
-          tap(params => {
-            this.lastVisitedId = +(params.get('id') ?? 0);
-          })
-        )
-        .subscribe();
+      this.fetchVideosFromApi();
     }
+  }
+
+  fetchVideosFromApi(): void {
+    this.videosService.getFeaturedVideos()
+      .pipe(
+        tap(data => {
+          this.hasError = false;
+          this.errorMessage = '';
+          this.videos = data;
+        
+          localStorage.setItem('featuredVideos', JSON.stringify(data));
+        }),
+        catchError(error => {
+          this.hasError = true;
+          this.errorMessage = 'Failed to load videos data: ' + error.message;
+          return EMPTY;
+        })
+      )
+      .subscribe();
+  }
+
+  
+  refreshVideos(): void {
+    this.fetchVideosFromApi();
   }
 }
