@@ -58,15 +58,15 @@ export class Login {
       next: (response) => {
         this.isLoading = false;
         if (response.success) {
-          // Navigate to home or dashboard after successful login
-          this.router.navigate(['/']);
+          // Navigate to admin dashboard after successful login
+          this.router.navigate(['/admin/dashboard']);
         } else {
-          this.errorMessage = 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.';
+          this.errorMessage = 'Login failed. Please check your credentials.';
         }
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+        this.errorMessage = 'An error occurred. Please try again.';
       }
     });
   }
@@ -76,6 +76,6 @@ export class Login {
   }
 
   navigateToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/signup']);
   }
 }
