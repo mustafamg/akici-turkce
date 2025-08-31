@@ -1,0 +1,48 @@
+<mat-card
+  class="card h-100 d-flex flex-column py-4 rounded-3 shadow-sm hover-shadow-lg bg-white border border-primary-light"
+  [routerLink]="['/videos', video?.id]"
+  role="link"
+  tabindex="0"
+  style="cursor: pointer"
+  (keyup.enter)="goToDetail()"
+  (keyup.space)="goToDetail()"
+  [attr.aria-label]="'Open details for ' + video?.title"
+>
+  <img
+    [attr.alt]="video?.title"
+    class="w-100 object-cover"
+    height="300"
+    [src]="video?.thumbnailUrl"
+    loading="lazy"
+    decoding="async"
+  />
+
+  <h3 class="font-semibold text-lg mb-2 line-clamp-2 text-center py-2">
+    {{ video?.title }}
+  </h3>
+
+  <mat-card-content class="text-muted">
+    <div class="row">
+      <div class="col text-start">
+        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-4">
+          {{ video?.difficulty }}
+        </span>
+      </div>
+      <div class="col text-end">
+        <span>{{ video?.categories?.[0]?.name || 'Uncategorized' }}</span>
+      </div>
+    </div>
+
+    <div class="text-center text-align-top">
+     <button
+  type="button"
+  class="btn btn-dark text-white w-100 py-1 rounded-pill mt-3"
+  [routerLink]="['/videos', video?.id]"
+  (click)="$event.stopPropagation()"
+>
+  <mat-icon class="pt-2" style="overflow: hidden !important;">play_arrow</mat-icon>
+  <span class="pb-2">Watch & Learn</span>
+</button>
+    </div>
+  </mat-card-content>
+</mat-card>

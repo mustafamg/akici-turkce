@@ -15,3 +15,10 @@ export interface Video {
   difficulty: string;
   categories: Category[];
 }
+
+export interface Paginated<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+}

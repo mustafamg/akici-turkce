@@ -1,0 +1,61 @@
+<section class="container py-4 detail">
+  <ng-container *ngIf="loading(); else loaded">
+    <div class="row g-4">
+      <div class="col-12 col-lg-8"><div class="skeleton-player rounded-3"></div></div>
+      <div class="col-12 col-lg-4">
+        <div class="skeleton-title rounded-2 mb-3"></div>
+        <div class="skeleton-lines rounded-2"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loaded>
+    <ng-container *ngIf="video(); else notFound">
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-8 mb-4">
+          <div *ngIf="safeEmbedUrl(); else noEmbed" class="ratio ratio-16x9 player-card rounded-3 shadow-sm overflow-hidden">
+            <iframe class="w-100 h-100"
+                    [src]="safeEmbedUrl()"
+                    title="{{ video()?.title }}"
+                    frameborder="0"
+                    allowfullscreen
+                    loading="lazy"></iframe>
+          </div>
+          <ng-template #noEmbed>
+            <div class="player-placeholder rounded-3 shadow-sm">
+              <mat-icon>play_circle</mat-icon>
+              <p>Video player unavailable. Read the description.</p>
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="col-12 col-lg-4 mb-4">
+          <div class="info-card bg-white rounded-3 shadow-sm border">
+            <h1 class="h4 fw-bold mb-2 line-clamp-3 title">{{ video()?.title }}</h1>
+
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <span class="pill pill-blue">{{ video()?.difficulty }}</span>
+              <ng-container *ngFor="let c of video()?.categories">
+                <span class="pill pill-light">{{ c.name }}</span>
+              </ng-container>
+            </div>
+
+            <p class="desc mb-0">{{ video()?.description }}</p>
+
+            <a *ngIf="video()?.transcriptUrl"
+               mat-stroked-button color="primary"
+               class="w-100 mt-3"
+               [href]="video()?.transcriptUrl!"
+               target="_blank" rel="noopener">
+              View transcript
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #notFound>
+      <p class="text-muted">Video not found.</p>
+    </ng-template>
+  </ng-template>
+</section>
