@@ -26,12 +26,12 @@
         </svg>
       </div>
       <h1 class="app-title">Akıcı Türkçe</h1>
-      <p class="app-subtitle">Türkçe öğrenmenin en etkili yolu</p>
+      <p class="app-subtitle">The most effective way to learn Turkish</p>
     </div>
 
     <!-- Signup Form -->
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="login-form">
-      <h2 class="form-title">Hesap Oluştur</h2>
+      <h2 class="form-title">Create Account</h2>
 
       <!-- Error Message -->
       <div *ngIf="errorMessage()" class="error-message" role="alert">
@@ -47,7 +47,7 @@
 
       <!-- Username Field -->
       <div class="form-group">
-        <label for="username" class="form-label">Kullanıcı Adı</label>
+        <label for="username" class="form-label">Username</label>
         <div class="input-container">
           <input
             id="username"
@@ -55,7 +55,7 @@
             formControlName="username"
             class="form-input"
             [class.error]="username?.invalid && username?.touched"
-            placeholder="kullanıcı adınız"
+            placeholder="your username"
             autocomplete="username"
           />
           <svg
@@ -73,15 +73,15 @@
           </svg>
         </div>
         <div *ngIf="username?.invalid && username?.touched" class="field-error">
-          <span *ngIf="username?.errors?.['required']"
-            >Kullanıcı adı gereklidir</span
-          >
+
+          <span *ngIf="username?.errors?.['required']">Username is required</span>
+
         </div>
       </div>
 
       <!-- Password Field -->
       <div class="form-group">
-        <label for="password" class="form-label">Şifre</label>
+        <label for="password" class="form-label">Password</label>
         <div class="input-container">
           <input
             id="password"
@@ -96,9 +96,9 @@
             type="button"
             class="password-toggle"
             (click)="togglePasswordVisibility()"
-            [attr.aria-label]="
-              hidePassword ? 'Şifreyi göster' : 'Şifreyi gizle'
-            "
+
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+
           >
             <svg
               *ngIf="hidePassword"
@@ -133,10 +133,10 @@
           </button>
         </div>
         <div *ngIf="password?.invalid && password?.touched" class="field-error">
-          <span *ngIf="password?.errors?.['required']">Şifre gereklidir</span>
-          <span *ngIf="password?.errors?.['minlength']"
-            >Şifre en az 6 karakter olmalıdır</span
-          >
+
+          <span *ngIf="password?.errors?.['required']">Password is required</span>
+          <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+
         </div>
       </div>
 
@@ -150,8 +150,10 @@
         [disabled]="isLoading()"
         [class.loading]="isLoading()"
       >
-        <span *ngIf="!isLoading()">Üye Ol</span>
+
+        <span *ngIf="!isLoading()">Sign Up</span>
         <div *ngIf="isLoading()" class="loading-spinner">
+
           <svg width="20" height="20" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3" fill="currentColor">
               <animate
@@ -168,16 +170,22 @@
               />
             </circle>
           </svg>
-          Üye olunuyor...
+          Signing up...
         </div>
       </button>
     </form>
 
     <!-- Login Link -->
     <div class="register-section">
-      <p>Zaten hesabınız var mı?</p>
-      <button type="button" class="register-link" (click)="navigateToLogin()">
-        Oturum Aç
+
+      <p>Already have an account?</p>
+      <button
+        type="button"
+        class="register-link"
+        (click)="navigateToLogin()"
+      >
+        Login
+
       </button>
     </div>
   </div>

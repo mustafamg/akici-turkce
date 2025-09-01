@@ -6,7 +6,13 @@ import { Footer } from './components/footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterModule, Header, Footer],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    Header,
+    Footer
+  ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,31 +2,32 @@
 <mat-toolbar class="navbar navbar-expand-md p-3 d-flex justify-content-between align-items-center" [ngClass]="currentBgClass">
     <div class="d-flex justify-content-between align-items-center w-100 px-3">
         <div class="d-flex align-items-center">
-            <div class="w-8 h-8 rounded-2 flex items-center justify-center me-2" [ngStyle]="{'background': isLoginPage ? 'rgba(255, 255, 255, 0.1)' : 'rgba(196, 30, 58, 0.1)'}">
+            <div class="w-8 h-8 rounded-2 flex items-center justify-center me-2" [ngStyle]="{'background': isLoginPage ? 'rgba(255, 255, 255, 0.1)' : (currentBgClass === 'bg-dark-red' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(196, 30, 58, 0.1)')}">
                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
-                    <circle cx="24" cy="24" r="20" [attr.fill]="isLoginPage ? 'white' : '#C41E3A'" [attr.opacity]="isLoginPage ? '0.1' : '0.1'"/>
-                    <circle cx="24" cy="24" r="16" [attr.fill]="isLoginPage ? 'white' : '#C41E3A'" [attr.opacity]="isLoginPage ? '0.2' : '0.2'"/>
-                    <circle cx="24" cy="24" r="12" [attr.fill]="isLoginPage ? 'white' : '#C41E3A'"/>
-                    <text x="24" y="28" text-anchor="middle" [attr.fill]="isLoginPage ? '#C41E3A' : 'white'" font-weight="bold" font-size="14">T</text>
+                    <circle cx="24" cy="24" r="20" [attr.fill]="isLoginPage ? 'white' : (currentBgClass === 'bg-dark-red' ? 'white' : '#C41E3A')" [attr.opacity]="isLoginPage ? '0.1' : '0.1'"/>
+                    <circle cx="24" cy="24" r="16" [attr.fill]="isLoginPage ? 'white' : (currentBgClass === 'bg-dark-red' ? 'white' : '#C41E3A')" [attr.opacity]="isLoginPage ? '0.2' : '0.2'"/>
+                    <circle cx="24" cy="24" r="12" [attr.fill]="isLoginPage ? 'white' : (currentBgClass === 'bg-dark-red' ? 'white' : '#C41E3A')"/>
+                    <text x="24" y="28" text-anchor="middle" [attr.fill]="isLoginPage ? '#C41E3A' : (currentBgClass === 'bg-dark-red' ? '#C41E3A' : 'white')" font-weight="bold" font-size="14">T</text>
                 </svg>
             </div>
-            <span class="fs-4 fw-bold cursor-pointer" [ngClass]="{'text-red': !isLoginPage, 'text-white': isLoginPage}">Akıcı Türkçe</span>
+            <span class="fs-4 fw-bold cursor-pointer" [ngClass]="{'text-red': !isLoginPage && currentBgClass !== 'bg-dark-red', 'text-white': isLoginPage || currentBgClass === 'bg-dark-red'}">Akıcı Türkçe</span>
         </div>
 
         <!-- Auth Buttons -->
         <div class="d-md-flex space-x-2">
             <nav class="d-md-flex space-x-3">
-                <a class="text-decoration-none px-2 py-2 text-white">Videos</a>
-                <a class="text-decoration-none rounded-pill px-2 py-2 text-white">Dashboard</a>
+                <a class="text-decoration-none px-2 py-2 text-white" routerLink="/videos">Videos</a>
+                <a class="text-decoration-none px-2 py-2 text-white" routerLink="/add-video">Add Video</a>
+                <a class="text-decoration-none rounded-pill px-2 py-2 text-white" routerLink="/dashboard">Dashboard</a>
             </nav>
-            <button mat-stroked-button 
-                    class="btn btn-outline-light rounded-pill px-4 py-2 me-2" 
-                    [ngClass]="{'text-red': isLoginPage, 'text-primary-red': !isLoginPage}" 
+            <button mat-flat-button
+                    class="btn rounded-pill px-4 py-2 me-2"
+                    [ngClass]="isLoginPage ? 'btn-light text-red' : (currentBgClass === 'bg-dark-red' ? 'btn-outline-light text-white' : 'btn-primary text-white')"
                     routerLink="/login">Login</button>
-            <button mat-flat-button 
-                    class="btn btn-light rounded-pill px-4 py-2" 
-                    [ngClass]="{'text-red': isLoginPage, 'text-primary-red': !isLoginPage}"
-                    routerLink="/signup">Üye Ol</button>
+            <button mat-flat-button
+                    class="btn rounded-pill px-4 py-2"
+                    [ngClass]="isLoginPage ? 'btn-light text-red' : (currentBgClass === 'bg-dark-red' ? 'btn-outline-light text-white' : 'btn-primary text-white')"
+                    routerLink="/signup">Sign Up</button>
         </div>
     </div>
 </mat-toolbar>
