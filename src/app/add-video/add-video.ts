@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AddVideoFormComponent } from './components/add-video-form/add-video-form';
+import { AddVideoForm } from './components/add-video-form/add-video-form';
 import { VideoMetadataPreviewComponent } from './components/video-metadata-preview/video-metadata-preview';
 import { VideoService } from './services/video.service';
 import { VideoMetadata, VideoSaveRequest } from './models/video.interface';
@@ -9,7 +9,7 @@ import { VideoMetadata, VideoSaveRequest } from './models/video.interface';
 @Component({
   selector: 'app-add-video',
 standalone: true,
-imports: [CommonModule, AddVideoFormComponent, VideoMetadataPreviewComponent],
+imports: [CommonModule, AddVideoForm, VideoMetadataPreviewComponent],
   template: `
     <div class="add-video-page">
       

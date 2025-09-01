@@ -9,13 +9,6 @@ import { AuthService } from '../auth/services/auth';
   imports: [CommonModule, RouterModule],
   template: `
     <div class="admin-layout">
-      <header class="admin-header">
-        <div class="header-content">
-          <h1 class="admin-title">Admin Dashboard</h1>
-          <button class="logout-btn" (click)="logout()">Logout</button>
-        </div>
-      </header>
-
       <main class="admin-main">
         <router-outlet></router-outlet>
       </main>

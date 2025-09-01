@@ -11,14 +11,14 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'login', component: Login },
   { path: 'signup', component: Signup },
-  { path: 'add-video', component: AddVideoComponent },
   {
     path: 'admin',
     component: AdminLayout,
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: AdminDashboard }
+      { path: 'dashboard', component: AdminDashboard },
+      { path: 'add-video', component: AddVideoComponent }
     ]
   }
 ];

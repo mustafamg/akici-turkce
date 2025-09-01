@@ -1,13 +1,15 @@
-# Add-Video Component Replacement Plan
+# TODO: Fix YouTube URL Validation and Difficulty Saving
 
-## Steps to Complete:
+## Completed Tasks
+- [x] Updated onSave() in video-metadata-preview.ts to include difficulty in saveData
+- [x] Added validation to check if difficulty is set before saving
+- [x] Updated YouTube URL regex in add-video-form.ts to accept more formats (embed, v/, shorts/, query params with &)
 
-1. [x] Replace `src/app/add-video/add-video.ts` with new component implementation
-2. [x] Remove `src/app/add-video/add-video.html` (replaced by inline template)
-3. [x] Remove `src/app/add-video/add-video.scss` (replaced by inline styles)
-4. [ ] Verify component works with existing child components
-5. [ ] Test the form display and functionality
+## Summary of Changes
+- **video-metadata-preview.ts**: Added difficulty to VideoSaveRequest and validation for it
+- **add-video-form.ts**: Updated youtubeUrlValidator regex to be more permissive
 
-## Current Status:
-- External template and style files removed
-- Ready for testing the component
+## Next Steps
+- Test the changes with a valid YouTube URL
+- Ensure difficulty is properly set in metadata before saving
+- Verify that the URL validation now accepts various YouTube URL formats

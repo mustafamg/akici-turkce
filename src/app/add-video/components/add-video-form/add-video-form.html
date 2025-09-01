@@ -26,7 +26,7 @@
           class="fetch-btn"
           [disabled]="isLoading || videoForm.invalid"
         >
-          <span *ngIf="!isLoading">Fetch Details</span>
+          Fetch Details
           <span *ngIf="isLoading" class="loading-text">
             <span class="spinner"></span>
             Fetching...
@@ -37,6 +37,54 @@
       <!-- Error Messages -->
       <div *ngIf="showUrlError" class="error-message">
         {{ urlErrorMessage }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Difficulty Level <span class="required">*</span></label>
+      <div class="difficulty-selector">
+      <div class="difficulty-option">
+          <input
+            type="radio"
+            id="beginner"
+            formControlName="difficulty"
+            value="beginner"
+            class="difficulty-radio"
+          >
+          <label for="beginner" class="difficulty-card beginner">
+            <div class="difficulty-bar difficulty-bar-beginner"></div>
+            <div class="difficulty-title">Beginner</div>
+            <div class="difficulty-description">A1, A2</div>
+          </label>
+        </div>
+        <div class="difficulty-option">
+          <input
+            type="radio"
+            id="intermediate"
+            formControlName="difficulty"
+            value="intermediate"
+            class="difficulty-radio"
+          >
+          <label for="intermediate" class="difficulty-card intermediate">
+            <div class="difficulty-bar difficulty-bar-intermediate"></div>
+            <div class="difficulty-title">Intermediate</div>
+            <div class="difficulty-description">B1, B2</div>
+          </label>
+        </div>
+        <div class="difficulty-option">
+          <input
+            type="radio"
+            id="advanced"
+            formControlName="difficulty"
+            value="advanced"
+            class="difficulty-radio"
+          >
+          <label for="advanced" class="difficulty-card advanced">
+            <div class="difficulty-bar difficulty-bar-advanced"></div>
+            <div class="difficulty-title">Advanced</div>
+            <div class="difficulty-description">C1, C2</div>
+          </label>
+        </div>
       </div>
     </div>
   </form>

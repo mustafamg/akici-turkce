@@ -6,6 +6,7 @@ export interface VideoMetadata {
   publishedAt?: string;
   videoId?: string;
   url: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export interface VideoSaveRequest {
@@ -13,6 +14,7 @@ export interface VideoSaveRequest {
   title: string;
   description: string;
   thumbnail: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export interface ApiResponse<T> {
@@ -28,5 +30,6 @@ export interface VideoSaveResponse {
   title: string;
   description: string;
   thumbnail: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
   createdAt: string;
 }

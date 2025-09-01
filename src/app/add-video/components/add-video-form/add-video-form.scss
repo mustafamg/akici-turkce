@@ -146,3 +146,90 @@
     width: 100%;
   }
 }
+
+/* Difficulty selector styles */
+.difficulty-selector {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-left: 0;
+}
+
+.difficulty-option {
+  position: relative;
+}
+
+.difficulty-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.difficulty-card {
+  padding: 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.difficulty-card:hover {
+  border-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.1);
+}
+
+.difficulty-radio:checked + .difficulty-card {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.05);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
+}
+
+.difficulty-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.difficulty-title {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.difficulty-description {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.beginner .difficulty-icon { color: #22c55e; }
+.intermediate .difficulty-icon { color: #f59e0b; }
+.advanced .difficulty-icon { color: #dc2626; }
+
+.difficulty-bar {
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.difficulty-bar-beginner {
+  background: linear-gradient(90deg, #22c55e 0%, #a7f3d0 100%);
+}
+
+.difficulty-bar-intermediate {
+  background: linear-gradient(90deg, #f59e0b 0%, #fde68a 100%);
+}
+
+.difficulty-bar-advanced {
+  background: linear-gradient(90deg, #dc2626 0%, #fca5a5 100%);
+}
+
+@media (max-width: 768px) {
+  .difficulty-selector {
+    grid-template-columns: 1fr;
+  }
+}
