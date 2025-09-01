@@ -1,0 +1,11 @@
+<mat-form-field appearance="outline" class="filter-field">
+  <mat-select multiple [value]="selected" (valueChange)="onChange($event)">
+    <mat-select-trigger>
+      <span [class.placeholder]="!selected?.length">
+        {{ selected?.length ? selected.join(', ') : 'Difficulty' }}
+      </span>
+    </mat-select-trigger>
+
+    <mat-option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}</mat-option>
+  </mat-select>
+</mat-form-field>

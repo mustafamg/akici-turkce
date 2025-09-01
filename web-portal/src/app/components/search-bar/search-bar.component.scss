@@ -1,0 +1,20 @@
+:host { display:block; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  height: 42px; padding: 0 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 999px; background: #fff;
+  transition: box-shadow .15s, border-color .15s;
+}
+.search:focus-within {
+  border-color: rgba(0,123,255,.35);
+  box-shadow: 0 0 0 4px rgba(0,123,255,.08);
+}
+mat-icon {
+  font-size: 20px; height: 20px; width: 20px; color: #6b7280;
+}
+input {
+  border: 0; outline: 0; width: 100%;
+  font-size: .95rem; background: transparent;
+  height: 38px; line-height: 38px;
+}
