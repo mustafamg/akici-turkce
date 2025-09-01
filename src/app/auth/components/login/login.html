@@ -1,146 +1,201 @@
 <div class="login-container">
-    <div class="login-card">
-      <!-- Header -->
-      <div class="login-header">
-        <div class="logo">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="20" fill="#C41E3A" opacity="0.1"/>
-            <circle cx="24" cy="24" r="16" fill="#C41E3A" opacity="0.2"/>
-            <circle cx="24" cy="24" r="12" fill="#C41E3A"/>
-            <text x="24" y="28" text-anchor="middle" fill="white" font-weight="bold" font-size="14">T</text>
-          </svg>
-        </div>
-        <h1 class="app-title">Akıcı Türkçe</h1>
-        <p class="app-subtitle">The most effective way to learn Turkish</p>
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 48 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="24" cy="24" r="20" fill="#C41E3A" opacity="0.1" />
+          <circle cx="24" cy="24" r="16" fill="#C41E3A" opacity="0.2" />
+          <circle cx="24" cy="24" r="12" fill="#C41E3A" />
+          <text
+            x="24"
+            y="28"
+            text-anchor="middle"
+            fill="white"
+            font-weight="bold"
+            font-size="14"
+          >
+            T
+          </text>
+        </svg>
       </div>
-  
-      <!-- Login Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <h2 class="form-title">Login</h2>
-  
-        <!-- Error Message -->
-        <div *ngIf="errorMessage" class="error-message" role="alert">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+      <h1 class="app-title">Akıcı Türkçe</h1>
+      <p class="app-subtitle">The most effective way to learn Turkish</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <h2 class="form-title">Login</h2>
+
+      <div *ngIf="errorMessage()" class="error-message" role="alert">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        {{ errorMessage() }}
+      </div>
+
+      <div *ngIf="successMessage()" class="success-message" role="alert">
+        {{ successMessage() }}
+      </div>
+
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <div class="input-container">
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="form-input"
+            [class.error]="username?.invalid && username?.touched"
+            placeholder="your username"
+            autocomplete="username"
+          />
+          <svg
+            class="input-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"
+            />
           </svg>
-          {{ errorMessage }}
         </div>
-  
-        <!-- Username Field -->
-        <div class="form-group">
-          <label for="username" class="form-label">Username</label>
-          <div class="input-container">
-            <input
-              id="username"
-              type="text"
-              formControlName="username"
-              class="form-input"
-              [class.error]="username?.invalid && username?.touched"
-              placeholder="your username"
-              autocomplete="username"
-            />
-            <svg class="input-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-            </svg>
-          </div>
-          <div *ngIf="username?.invalid && username?.touched" class="field-error">
-            <span *ngIf="username?.errors?.['required']">Username is required</span>
-          </div>
+        <div *ngIf="username?.invalid && username?.touched" class="field-error">
+          <span *ngIf="username?.errors?.['required']">Username is required</span>
         </div>
-  
-        <!-- Password Field -->
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
-          <div class="input-container">
-            <input
-              id="password"
-              [type]="hidePassword ? 'password' : 'text'"
-              formControlName="password"
-              class="form-input"
-              [class.error]="password?.invalid && password?.touched"
-              placeholder="••••••••"
-              autocomplete="current-password"
-            />
-            <button
-              type="button"
-              class="password-toggle"
-              (click)="togglePasswordVisibility()"
-              [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-            >
-              <svg *ngIf="hidePassword" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-              </svg>
-              <svg *ngIf="!hidePassword" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd"/>
-                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"/>
-              </svg>
-            </button>
-          </div>
-          <div *ngIf="password?.invalid && password?.touched" class="field-error">
-            <span *ngIf="password?.errors?.['required']">Password is required</span>
-            <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
-          </div>
-        </div>
-  
-        <!-- Remember Me & Forgot Password -->
-        <div class="form-options">
-          <label class="checkbox-container">
-            <input
-              type="checkbox"
-              formControlName="rememberMe"
-              class="checkbox"
-            />
-            <span class="checkmark"></span>
-            Remember me
-          </label>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-container">
+          <input
+            id="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            class="form-input"
+            [class.error]="password?.invalid && password?.touched"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
           <button
             type="button"
-            class="forgot-password-link"
-            (click)="navigateToForgotPassword()"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="
+              hidePassword ? 'Show password' : 'Hide password'
+            "
           >
-            Forgot password
+            <svg
+              *ngIf="hidePassword"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                fill-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <svg
+              *ngIf="!hidePassword"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                clip-rule="evenodd"
+              />
+              <path
+                d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"
+              />
+            </svg>
           </button>
         </div>
-  
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="submit-button"
-          [disabled]="isLoading"
-          [class.loading]="isLoading"
-        >
-          <span *ngIf="!isLoading">Login</span>
-          <div *ngIf="isLoading" class="loading-spinner">
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="3" fill="currentColor">
-                <animate attributeName="r" values="3;7;3" dur="1s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
-              </circle>
-            </svg>
-            Logging in...
-          </div>
-        </button>
-      </form>
-  
-      <!-- Register Link -->
-      <div class="register-section">
-        <p>Don't have an account?</p>
+        <div *ngIf="password?.invalid && password?.touched" class="field-error">
+          <span *ngIf="password?.errors?.['required']">Password is required</span>
+          <span *ngIf="password?.errors?.['minlength']"
+            >Password must be at least 6 characters</span
+          >
+        </div>
+      </div>
+
+      <div class="form-options">
         <button
           type="button"
-          class="register-link"
-          (click)="navigateToRegister()"
+          class="forgot-password-link"
+          (click)="navigateToForgotPassword()"
         >
-          Create a free account
+          Forgot Password
         </button>
       </div>
-  
-      <!-- Free Trial Banner -->
-      <div class="trial-banner">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
-        </svg>
-        Try 14 days for free
-      </div>
+
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="isLoading()"
+        [class.loading]="isLoading()"
+      >
+        <span *ngIf="!isLoading()">Login</span>
+        <div *ngIf="isLoading()" class="loading-spinner">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" fill="currentColor">
+              <animate
+                attributeName="r"
+                values="3;7;3"
+                dur="1s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="opacity"
+                values="1;0.5;1"
+                dur="1s"
+                repeatCount="indefinite"
+              />
+            </circle>
+          </svg>
+          Logging in...
+        </div>
+      </button>
+    </form>
+
+    <div class="register-section">
+      <p>Don't have an account?</p>
+      <button
+        type="button"
+        class="register-link"
+        (click)="navigateToRegister()"
+      >
+        Create a free account
+      </button>
+    </div>
+
+    <div class="trial-banner">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path
+          fill-rule="evenodd"
+          d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Try for Free for 14 Days
     </div>
   </div>
+</div>

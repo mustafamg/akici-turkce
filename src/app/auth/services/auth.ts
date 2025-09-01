@@ -1,50 +1,80 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { BehaviorSubject, tap } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+interface AuthResponse {
+  token: string;
+  user: { id: number; role: string };
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private tokenKey = 'auth_token';
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-  login(username: string, password: string, rememberMe: boolean): Observable<any> {
-    // Simulating an API call with a delay and returning a fake JWT token
-    if (username === 'admin' && password === 'password') {
-      const fakeToken = 'fake-jwt-token-for-admin';
-      return of({ success: true, token: fakeToken }).pipe(
-        delay(1000),
-        tap(response => {
-          if (response.success) {
-            if (rememberMe) {
-              localStorage.setItem(this.tokenKey, response.token);
-            } else {
-              sessionStorage.setItem(this.tokenKey, response.token);
-            }
+  private authState = new BehaviorSubject<boolean>(this.hasToken());
+  isAuthenticated$ = this.authState.asObservable();
+
+  private readonly TOKEN_KEY = 'auth_token';
+
+  login(username: string, password: string) {
+    return this.http
+      .post<AuthResponse>('http://localhost:3000/auth/login', {
+        username,
+        password,
+      })
+      .pipe(
+        tap((res) => {
+          console.log(res.user.role);
+
+          this.handleAuth(res);
+          if (res.user.role === 'admin') {
+            this.router.navigate(['admin/dashboard']);
+          } else {
+            this.router.navigate(['/']);
           }
         })
       );
-    } else {
-      return of({ success: false, status: 401 }).pipe(delay(1000));
-    }
   }
 
-  signup(username: string, password: string, role: string): Observable<any> {
-    // Simulating an API call with a delay
-    return of({ success: true }).pipe(delay(1000));
+  signup(username: string, password: string) {
+    const role = 'learner';
+    return this.http
+      .post<AuthResponse>('http://localhost:3000/auth/register', {
+        username,
+        password,
+        role,
+      })
+      .pipe(
+        tap((res) =>
+          this.router.navigate(['/login'], {
+            state: {
+              message: 'Registration successful! Please login to continue.',
+            },
+          })
+        )
+      );
   }
 
   logout() {
-    localStorage.removeItem(this.tokenKey);
-    sessionStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.authState.next(false);
+    this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey) || sessionStorage.getItem(this.tokenKey);
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+  private handleAuth(res: AuthResponse) {
+    localStorage.setItem(this.TOKEN_KEY, res.token);
+    localStorage.setItem('userRole', res.user.role);
+    this.authState.next(true);
+  }
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
   isAdmin(): boolean {

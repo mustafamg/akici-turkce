@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
@@ -9,24 +14,39 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  styleUrls: ['./login.scss'],
 })
-export class Login {
+export class Login implements OnInit {
   loginForm: FormGroup;
   hidePassword = true;
-  isLoading = false;
-  errorMessage: string | null = null;
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      rememberMe: [false],
     });
+  }
+
+  /**
+   * OnInit lifecycle hook is called once the component is initialized.
+   * It is used here to read the router state passed during navigation.
+   */
+  ngOnInit() {
+    // history.state contains the state object passed via router.navigate
+    const state = history.state;
+    if (state && state.message) {
+      // Set the successMessage signal to display the message in the UI
+      this.successMessage.set(state.message);
+    }
   }
 
   get username() {
@@ -50,25 +70,42 @@ export class Login {
       this.loginForm.markAllAsTouched();
       return;
     }
-    this.isLoading = true;
-    this.errorMessage = null;
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
-    const { username, password, rememberMe } = this.loginForm.value;
-    this.authService.login(username, password, rememberMe).subscribe({
+    const { username, password } = this.loginForm.value;
+    this.authService.login(username, password).subscribe({
       next: (response) => {
-        this.isLoading = false;
-        if (response.success) {
-          // Navigate to admin dashboard after successful login
-          this.router.navigate(['/admin/dashboard']);
-        } else {
-          this.errorMessage = 'Login failed. Please check your credentials.';
-        }
+        // On successful login, AuthService handles navigation.
+        // We can stop the loader here, though navigation will soon destroy this component.
+        this.isLoading.set(false);
+        console.log('Login successful:', response);
       },
       error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = 'An error occurred. Please try again.';
-      }
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          'Login failed. Please check your username and password.'
+        );
+        console.error('Login error:', err);
+      },
     });
+    // this.authService.login(username, password).subscribe({
+    //   next: (response) => {
+    //     this.isLoading = false;
+    //     if (response) {
+    //       console.log(response);
+    //       // this.router.navigate(['/']);
+    //     } else {
+    //       this.isLoading = false;
+    //       this.errorMessage =
+    //         'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.';
+    //     }
+    //   },
+    //   error: (err) => {
+    //     this.isLoading = false;
+    //     this.errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+    //   },
+    // });
   }
 
   navigateToForgotPassword() {
@@ -76,6 +113,6 @@ export class Login {
   }
 
   navigateToRegister() {
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/register']);
   }
 }
