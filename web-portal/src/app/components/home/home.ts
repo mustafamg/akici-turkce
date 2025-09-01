@@ -21,31 +21,42 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
-  videos = [
-    {
-      level: 'Intermediate',
-      title: 'İstanbul\'da Bir Gün - Vlog',
-      type: 'Vlog',
-      src: '/img/placeholder.svg'
-    },
-    {
-      level: 'Beginner',
-      title: 'Türk Mutfağı: Baklava Tarifi',
-      type: 'Cooking',
-      src: '/img/placeholder.svg'
-    },
-    {
-      level: 'Advanced',
-      title: 'Türkiye\'nin Tarihi Yerleri',
-      type: 'Documentary',
-      src: '/img/placeholder.svg'
-    },
-    {
-      level: 'Intermediate',
-      title: 'Türkçe Müzik: Popüler Şarkılar',
-      type: 'Music',
-      src: '/img/placeholder.svg'
+export class Home implements OnInit {
+  videos: Video[] = [];
+  hasError: boolean = false;
+  errorMessage: string = '';
+  lastVisitedId: number = 0;
+
+  constructor(private route: ActivatedRoute, private videoService: VideoService) {}
+
+  ngOnInit() {
+    const storedVideos = localStorage.getItem('featuredVideos');
+
+    if (storedVideos) {
+    
+      this.videos = JSON.parse(storedVideos);
+    } else {
+      
+      this.videoService.getFeaturedVideos()
+        .pipe(
+          tap(data => {
+            this.hasError = false;
+            this.errorMessage = '';
+            this.videos = data;
+            
+            localStorage.setItem('featuredVideos', JSON.stringify(data));
+          }),
+          catchError(error => {
+            this.hasError = true;
+            this.errorMessage = 'Failed to load videos data: ' + error.message;
+            return EMPTY;
+          }),
+          switchMap(() => this.route.paramMap),
+          tap(params => {
+            this.lastVisitedId = +(params.get('id') ?? 0);
+          })
+        )
+        .subscribe();
     }
-  ];
+  }
 }

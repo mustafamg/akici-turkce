@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsNotEmpty, IsString, IsUrl } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsString, IsUrl } from "class-validator";
 
 export class CreateVideoDto {
     id: number;
@@ -24,11 +24,13 @@ export class CreateVideoDto {
     @IsNotEmpty()
     thumbnailUrl: string;
 
-    
     transcriptUrl: string;
 
     @IsArray()
     categoryIds: number[]
+    
+    @IsBoolean()
+    isFeatured: boolean;
 
     @IsEnum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED'], {
         message: 'Valid difficulty required'

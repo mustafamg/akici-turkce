@@ -6,6 +6,7 @@ import * as categoriesEntity from '../categories/entities/category.entity';
 import { Difficulty } from './entities/video.entity'
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { GetVideoDto } from './dto/get-video.dto';
 
 
 @Injectable()
@@ -31,6 +32,7 @@ export class VideosService {
       description: createVideoDto.description,
       thumbnailUrl: createVideoDto.thumbnailUrl,
       transcriptUrl: createVideoDto.transcriptUrl,
+      isFeatured: createVideoDto.isFeatured,
       difficulty: createVideoDto.difficulty as Difficulty,
       categories,
     });
@@ -59,21 +61,60 @@ export class VideosService {
 
   }
 
+  async findAll(getVideoDto: GetVideoDto) {
+    const { page, limit, difficulties, categories, search, sort, order, isFeatured } = getVideoDto;
 
-  async findAll() {
-    return await this.videoRepo.find({
-      relations: ['categories'],
-    })
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.videoRepo.createQueryBuilder('video')
+      .leftJoinAndSelect('video.categories', 'category');
+
+   
+    if (difficulties && difficulties.length > 0) {
+      queryBuilder.andWhere('video.difficulty IN (:...difficulties)', { difficulties });
+    }
+
+    if (categories && categories.length > 0) {
+      queryBuilder.andWhere('category.name IN (:...categories)', { categories });
+    }
+
+
+    
+    if (search) {
+      queryBuilder.andWhere('(video.title LIKE :search OR video.description LIKE :search)', { search: `%${search}%` });
+    }
+
+  
+    if (isFeatured !== undefined) {
+      queryBuilder.andWhere('video.isFeatured = :isFeatured', { isFeatured });
+    }
+
+    
+    queryBuilder.orderBy(`video.${sort}`, order);
+
+   
+    queryBuilder.skip(skip).take(limit);
+
+    const [items, total] = await queryBuilder.getManyAndCount();
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    };
   }
 
+
+
   async findOne(id: number) {
-    const findCategory = await this.videoRepo.findOneBy({id})
-    if(!findCategory ) {
-       throw new NotFoundException('Video not found');
+    const findCategory = await this.videoRepo.findOneBy({ id })
+    if (!findCategory) {
+      throw new NotFoundException('Video not found');
     }
     return await this.videoRepo.findOne({
-      where:{id},
-      relations:['categories']
+      where: { id },
+      relations: ['categories']
     })
   }
 

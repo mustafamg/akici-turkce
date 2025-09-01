@@ -12,6 +12,7 @@ export interface Video {
   description: string;
   thumbnailUrl: string;
   transcriptUrl: string | null;
+  isFeatured: boolean;
   difficulty: string;
   categories: Category[];
 }
