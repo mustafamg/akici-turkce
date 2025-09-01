@@ -46,4 +46,9 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+    return token === 'fake-jwt-token-for-admin';
+  }
 }

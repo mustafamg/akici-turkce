@@ -81,13 +81,21 @@ export class VideoMetadataPreviewComponent implements OnInit {
       return;
     }
 
+    // Check if difficulty is set
+    if (!this.metadata.difficulty) {
+      // You might want to show an error or handle this case
+      console.error('Difficulty level is required');
+      return;
+    }
+
     this.isSaving = true;
-    
+
     const saveData: VideoSaveRequest = {
       url: this.metadata.url,
       title: this.titleControl?.value?.trim() || '',
       description: this.descriptionControl?.value?.trim() || '',
-      thumbnail: this.thumbnailControl?.value || this.metadata.thumbnail
+      thumbnail: this.thumbnailControl?.value || this.metadata.thumbnail,
+      difficulty: this.metadata.difficulty
     };
 
     this.saveVideo.emit(saveData);

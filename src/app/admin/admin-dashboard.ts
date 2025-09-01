@@ -1,126 +1,173 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="dashboard">
-      <!-- Success Popup -->
-      <div *ngIf="showSuccessPopup" class="success-popup">
-        <div class="popup-content">
-          <svg class="success-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <span>You are successfully logged in!</span>
-        </div>
-      </div>
-
-      <div class="welcome-section">
-        <h2>Welcome to Admin Dashboard</h2>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3>Total Users</h3>
-          <div class="stat-number">1,234</div>
-        </div>
-
-        <div class="stat-card">
-          <h3>Active Sessions</h3>
-          <div class="stat-number">89</div>
-        </div>
-
-        <div class="stat-card">
-          <h3>System Health</h3>
-          <div class="stat-number">98%</div>
-        </div>
-
-        <div class="stat-card">
-          <h3>Revenue</h3>
-          <div class="stat-number">$12,345</div>
-        </div>
-      </div>
-
-      <div class="recent-activity">
-        <h3>Recent Activity</h3>
-        <div class="activity-list">
-          <div class="activity-item">
-            <span class="activity-time">2 hours ago</span>
-            <span class="activity-desc">New user registered</span>
-          </div>
-          <div class="activity-item">
-            <span class="activity-time">4 hours ago</span>
-            <span class="activity-desc">Video uploaded</span>
-          </div>
-          <div class="activity-item">
-            <span class="activity-time">6 hours ago</span>
-            <span class="activity-desc">System backup completed</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './admin-dashboard.html',
   styles: [`
-    .dashboard {
-      padding: 2rem 0;
+    /* No additional styles needed as styles are in the HTML file */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 3rem;
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      color: #1e293b;
     }
 
-    .welcome-section h2 {
-      color: #C41E3A;
+
+
+    .main-container {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-header {
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #C41E3A, #A0182E);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 0.5rem;
     }
 
-    .welcome-section p {
-      color: #6c757d;
+    .dashboard-subtitle {
+      color: #64748b;
       font-size: 1.1rem;
+      font-weight: 400;
     }
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 3rem;
     }
 
     .stat-card {
       background: white;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      text-align: center;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(196, 30, 58, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .stat-card h3 {
-      color: #6c757d;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #C41E3A, #A0182E);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(196, 30, 58, 0.15);
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #64748b;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .stat-number {
-      font-size: 2rem;
-      font-weight: bold;
-      color: #C41E3A;
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
     }
 
-    .recent-activity {
+    .stat-icon.users {
+      background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    }
+
+    .stat-icon.sessions {
+      background: linear-gradient(135deg, #dbeafe, #3b82f6);
+    }
+
+    .stat-icon.health {
+      background: linear-gradient(135deg, #dcfce7, #22c55e);
+    }
+
+    .stat-icon.revenue {
+      background: linear-gradient(135deg, #fce7f3, #ec4899);
+    }
+
+    .stat-value {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .stat-change {
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-change.positive {
+      color: #22c55e;
+    }
+
+    .stat-change.neutral {
+      color: #64748b;
+    }
+
+    .activity-section {
       background: white;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(196, 30, 58, 0.1);
     }
 
-    .recent-activity h3 {
-      color: #C41E3A;
-      margin-bottom: 1rem;
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .activity-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
     }
 
     .activity-list {
@@ -133,26 +180,162 @@ import { CommonModule } from '@angular/common';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem;
-      background: #f8f9fa;
-      border-radius: 0.375rem;
+      padding: 1rem;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .activity-item:hover {
+      background: #f1f5f9;
+      transform: translateX(4px);
+      border-color: #C41E3A;
+    }
+
+    .activity-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .activity-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #C41E3A;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .activity-text {
+      font-weight: 500;
+      color: #1e293b;
     }
 
     .activity-time {
-      color: #6c757d;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      color: #64748b;
+      font-weight: 500;
     }
 
-    .activity-desc {
-      color: #495057;
-      font-weight: 500;
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(196, 30, 58, 0.1), rgba(160, 24, 46, 0.05));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-circle:nth-child(1) {
+      width: 100px;
+      height: 100px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-circle:nth-child(2) {
+      width: 150px;
+      height: 150px;
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .floating-circle:nth-child(3) {
+      width: 80px;
+      height: 80px;
+      bottom: 20%;
+      left: 30%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .success-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #22c55e;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    .success-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .nav-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .dashboard-title {
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
     }
   `]
 })
-export class AdminDashboard implements OnInit {
+export class AdminDashboard implements OnInit, AfterViewInit {
   showSuccessPopup = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit() {
     // Show success popup when component initializes
@@ -163,5 +346,49 @@ export class AdminDashboard implements OnInit {
       this.showSuccessPopup = false;
       this.cdr.detectChanges();
     }, 1000);
+  }
+
+  ngAfterViewInit() {
+    // Add smooth scrolling and interaction effects
+    this.initializeAnimations();
+  }
+
+  private initializeAnimations() {
+    const statCards = this.elementRef.nativeElement.querySelectorAll('.stat-card');
+
+    // Animate stat cards on load
+    statCards.forEach((card: HTMLElement, index: number) => {
+      this.renderer.setStyle(card, 'opacity', '0');
+      this.renderer.setStyle(card, 'transform', 'translateY(20px)');
+
+      setTimeout(() => {
+        this.renderer.setStyle(card, 'transition', 'all 0.6s ease');
+        this.renderer.setStyle(card, 'opacity', '1');
+        this.renderer.setStyle(card, 'transform', 'translateY(0)');
+      }, index * 150);
+    });
+
+    // Add click effects to stat cards
+    statCards.forEach((card: HTMLElement) => {
+      this.renderer.listen(card, 'click', () => {
+        this.renderer.setStyle(card, 'transform', 'scale(0.98)');
+        setTimeout(() => {
+          this.renderer.setStyle(card, 'transform', '');
+        }, 150);
+      });
+    });
+
+    // Animate activity items
+    const activityItems = this.elementRef.nativeElement.querySelectorAll('.activity-item');
+    activityItems.forEach((item: HTMLElement, index: number) => {
+      this.renderer.setStyle(item, 'opacity', '0');
+      this.renderer.setStyle(item, 'transform', 'translateX(-20px)');
+
+      setTimeout(() => {
+        this.renderer.setStyle(item, 'transition', 'all 0.5s ease');
+        this.renderer.setStyle(item, 'opacity', '1');
+        this.renderer.setStyle(item, 'transform', 'translateX(0)');
+      }, 800 + index * 100);
+    });
   }
 }

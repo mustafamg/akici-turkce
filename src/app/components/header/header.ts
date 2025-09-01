@@ -1,34 +1,38 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../auth/services/auth';
 
 @Component({
   selector: 'app-header',
   imports: [
-    MatToolbarModule,
     RouterModule,
     CommonModule
   ],
   templateUrl: './header.html',
-  styleUrl: './header.scss'
+  styleUrls: ['./header.scss']
 })
 export class Header implements OnInit, OnDestroy {
-  currentBgClass: string = 'bg-beige';
-  isLoginPage: boolean = false;
+  isAuthenticated: boolean = false;
+  isAdmin: boolean = false;
+  isAdminRoute: boolean = false;
   private routerSubscription!: Subscription;
 
-  constructor(private router: Router) {}
+  @ViewChild('logoutDialog') logoutDialog!: ElementRef;
+
+  constructor(private router: Router, private authService: AuthService, private renderer: Renderer2) {}
 
   ngOnInit() {
-    this.updateRouteState(this.router.url);
-    
+    this.checkAuthStatus();
+    this.checkAdminRoute(this.router.url);
+
     this.routerSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.updateRouteState(event.url);
+        this.checkAuthStatus();
+        this.checkAdminRoute(event.url);
       });
   }
 
@@ -38,19 +42,27 @@ export class Header implements OnInit, OnDestroy {
     }
   }
 
-  private updateRouteState(url: string) {
-    if (url === '/' || url === '') {
-      this.currentBgClass = 'bg-white';
-      this.isLoginPage = false;
-    } else if (url === '/login' || url === '/signup' || url === '/add-video') {
-      this.currentBgClass = 'bg-red';
-      this.isLoginPage = true;
-    } else if (url.startsWith('/admin')) {
-      this.currentBgClass = 'bg-dark-red';
-      this.isLoginPage = false;
-    } else {
-      this.currentBgClass = 'bg-beige';
-      this.isLoginPage = false;
-    }
+  private checkAuthStatus() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.isAdmin = this.authService.isAdmin();
+  }
+
+  private checkAdminRoute(url: string) {
+    this.isAdminRoute = url.startsWith('/admin');
+  }
+
+  openLogoutDialog() {
+    this.renderer.setStyle(this.logoutDialog.nativeElement, 'display', 'flex');
+  }
+
+  closeLogoutDialog() {
+    this.renderer.setStyle(this.logoutDialog.nativeElement, 'display', 'none');
+  }
+
+  confirmLogout() {
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.closeLogoutDialog();
+    this.router.navigate(['/']);
   }
 }
