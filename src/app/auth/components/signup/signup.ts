@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
@@ -9,13 +14,13 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './signup.html',
-  styleUrls: ['./signup.scss']
+  styleUrls: ['./signup.scss'],
 })
 export class Signup {
   signupForm: FormGroup;
   hidePassword = true;
-  isLoading = false;
-  errorMessage: string | null = null;
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +30,7 @@ export class Signup {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['learner']  // default role, hidden from user
+      role: ['learner'], // default role, hidden from user
     });
   }
 
@@ -51,26 +56,32 @@ export class Signup {
       this.signupForm.markAllAsTouched();
       return;
     }
-    
-    this.isLoading = true;
-    this.errorMessage = null;
 
-    const { username, password, role } = this.signupForm.value;
-    
-    this.authService.signup(username, password, role).subscribe({
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    const { username, password } = this.signupForm.value;
+
+    this.authService.signup(username, password).subscribe({
       next: (response) => {
-        this.isLoading = false;
-        if (response.success) {
-          this.router.navigate(['/login']);
-        } else {
-          this.errorMessage = 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.';
-        }
+        this.isLoading.set(false);
+        console.log('Signup successful:', response);
+
+        // if (response.success) {
+        //   this.router.navigate(['/login']);
+        // } else {
+        //   this.errorMessage =
+        //     'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.';
+        // }
       },
       error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-        console.error('Signup error:', err); // Optional: for debugging
-      }
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          err.error?.message ||
+            'Signup failed. The username may already be taken.'
+        );
+        console.error('Signup error:', err);
+      },
     });
   }
 
