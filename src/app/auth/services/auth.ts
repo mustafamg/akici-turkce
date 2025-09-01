@@ -30,7 +30,7 @@ export class AuthService {
 
           this.handleAuth(res);
           if (res.user.role === 'admin') {
-            this.router.navigate(['/signup']);
+            this.router.navigate(['admin/dashboard']);
           } else {
             this.router.navigate(['/']);
           }
