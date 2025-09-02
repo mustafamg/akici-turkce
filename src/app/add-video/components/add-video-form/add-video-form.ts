@@ -56,47 +56,43 @@ export class AddVideoForm implements OnInit {
     this.urlErrorMessage = '';
   }
 
-  onFetchMetadata() {
-    if (this.videoForm.invalid) {
-      this.showUrlError = true;
-      const urlControl = this.videoForm.get('url');
-      if (urlControl?.hasError('required')) {
-        this.urlErrorMessage = 'YouTube URL is required';
-      } else if (urlControl?.hasError('invalidYoutubeUrl')) {
-        this.urlErrorMessage = 'Please enter a valid YouTube URL';
-      } else {
-        this.urlErrorMessage = 'Invalid URL format';
-      }
-      return;
+  // In your AddVideoForm component, update the onFetchMetadata() method:
+
+onFetchMetadata() {
+  if (this.videoForm.invalid) {
+    this.showUrlError = true;
+    const urlControl = this.videoForm.get('url');
+    if (urlControl?.hasError('required')) {
+      this.urlErrorMessage = 'YouTube URL is required';
+    } else if (urlControl?.hasError('invalidYoutubeUrl')) {
+      this.urlErrorMessage = 'Please enter a valid YouTube URL';
+    } else {
+      this.urlErrorMessage = 'Invalid URL format';
     }
-
-    this.isLoading = true;
-    const url = this.videoForm.value.url;
-
-    this.videoService.fetchMetadata(url).subscribe({
-      next: (response: any) => {
-        if (response.success && response.data) {
-          this.video = response.data;
-          this.video.url = url;
-          this.video.difficulty = this.videoForm.value.difficulty;
-          this.metadataFetched.emit(this.video);
-        } else {
-          const errorMessage = response.message || 'Failed to fetch video metadata';
-          this.showUrlError = true;
-          this.urlErrorMessage = errorMessage;
-          this.fetchError.emit(errorMessage);
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        const errorMessage = 'Failed to fetch video metadata';
-        this.showUrlError = true;
-        this.urlErrorMessage = errorMessage;
-        this.fetchError.emit(errorMessage);
-        this.isLoading = false;
-      }
-    });
+    return;
   }
+
+  this.isLoading = true;
+  const url = this.videoForm.value.url;
+
+  this.videoService.fetchMetadata(url).subscribe({
+    next: (metadata: VideoMetadata) => {
+      // Service returns VideoMetadata directly, not wrapped in response object
+      this.video = metadata;
+      this.video.url = url;
+      this.video.difficulty = this.videoForm.value.difficulty;
+      this.metadataFetched.emit(this.video);
+      this.isLoading = false;
+    },
+    error: (error) => {
+      const errorMessage = error.message || 'Failed to fetch video metadata';
+      this.showUrlError = true;
+      this.urlErrorMessage = errorMessage;
+      this.fetchError.emit(errorMessage);
+      this.isLoading = false;
+    }
+  });
+}
 
   onSubmit() {
     if (this.videoForm.invalid) {
