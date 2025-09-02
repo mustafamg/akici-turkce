@@ -16,7 +16,8 @@ export class AuthService {
   private authState = new BehaviorSubject<boolean>(this.hasToken());
   isAuthenticated$ = this.authState.asObservable();
 
-  private readonly TOKEN_KEY = 'auth_token';
+  private readonly TOKEN_KEY = 'akici_tr_auth_token';
+  private readonly USER_ROLE_KEY = 'akici_tr_user_role';
 
   login(username: string, password: string) {
     return this.http
@@ -59,6 +60,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_ROLE_KEY);
     this.authState.next(false);
     this.router.navigate(['/login']);
   }
@@ -69,7 +71,7 @@ export class AuthService {
 
   private handleAuth(res: AuthResponse) {
     localStorage.setItem(this.TOKEN_KEY, res.token);
-    localStorage.setItem('userRole', res.user.role);
+    localStorage.setItem(this.USER_ROLE_KEY, res.user.role);
     this.authState.next(true);
   }
 
@@ -77,8 +79,27 @@ export class AuthService {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
+  /**
+   * Public method to check if user is currently authenticated
+   * Returns the current authentication status synchronously
+   */
+  isAuthenticated(): boolean {
+    return this.hasToken();
+  }
+
+  /**
+   * Public method to check if the current user has admin role
+   * Returns true if the stored user role is 'admin'
+   */
   isAdmin(): boolean {
-    const token = this.getToken();
-    return token === 'fake-jwt-token-for-admin';
+    return localStorage.getItem(this.USER_ROLE_KEY) === 'admin';
+  }
+
+  /**
+   * Public method to get the current user's role
+   * Returns the stored user role or null if not set
+   */
+  getRole(): string | null {
+    return localStorage.getItem(this.USER_ROLE_KEY);
   }
 }
