@@ -5,6 +5,7 @@ import { Signup } from './auth/components/signup/signup'; // Update this import 
 import { AddVideoComponent } from './add-video/add-video';
 import { AdminLayout } from './admin/admin-layout';
 import { AdminDashboard } from './admin/admin-dashboard';
+import { CategoriesComponent } from './admin/categories/categories.component';
 import { AuthGuard } from './auth/guards/auth-guard';
 
 export const routes: Routes = [
@@ -18,7 +19,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDashboard },
-      { path: 'add-video', component: AddVideoComponent }
+      { path: 'add-video', component: AddVideoComponent },
+      { path: 'categories', component: CategoriesComponent }
     ]
   }
 ];
