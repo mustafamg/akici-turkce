@@ -5,7 +5,7 @@ import { catchError, EMPTY, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -22,41 +22,18 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './home.scss'
 })
 export class Home implements OnInit {
-  videos: Video[] = [];
-  hasError: boolean = false;
-  errorMessage: string = '';
-  lastVisitedId: number = 0;
+  videos = signal<Video[]>([]);
+  constructor(private videoService : VideoService){}
+  
 
-  constructor(private route: ActivatedRoute, private videoService: VideoService) {}
-
-  ngOnInit() {
-    const storedVideos = localStorage.getItem('featuredVideos');
-
-    if (storedVideos) {
-    
-      this.videos = JSON.parse(storedVideos);
-    } else {
-      
-      this.videoService.getFeaturedVideos()
-        .pipe(
-          tap(data => {
-            this.hasError = false;
-            this.errorMessage = '';
-            this.videos = data;
-            
-            localStorage.setItem('featuredVideos', JSON.stringify(data));
-          }),
-          catchError(error => {
-            this.hasError = true;
-            this.errorMessage = 'Failed to load videos data: ' + error.message;
-            return EMPTY;
-          }),
-          switchMap(() => this.route.paramMap),
-          tap(params => {
-            this.lastVisitedId = +(params.get('id') ?? 0);
-          })
-        )
-        .subscribe();
-    }
+  ngOnInit(): void {
+    this.videoService.getFeaturedVideos().subscribe((videos) => {
+      this.videos.set(videos);
+      console.log('Featured videos: ', this.videos());
+    });
   }
+  getCategoryNames(video: Video) {
+    return  video.categories?.map(c => c.name).join(', ') || ''
+  }
+  
 }
