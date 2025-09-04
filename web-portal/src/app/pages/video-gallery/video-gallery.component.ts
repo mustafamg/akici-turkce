@@ -38,7 +38,7 @@ export class VideoGalleryComponent implements OnInit {
   ngOnInit() {
     const qp = this.route.snapshot.queryParamMap;
     const difficulties = qp.getAll('difficulty');
-    const categories   = qp.getAll('category').map(Number).filter(n => !Number.isNaN(n));
+    const categories   = qp.getAll('categoryIds').map(Number).filter(n => !Number.isNaN(n));
     const search       = qp.get('search') ?? '';
     const page         = Math.max(1, Number(qp.get('page') || 1));
     const size         = Math.max(1, Number(qp.get('limit') || this.fs.pageSize()));
@@ -89,7 +89,7 @@ export class VideoGalleryComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         difficulty: this.fs.difficulties().length ? this.fs.difficulties() : null,
-        category:   this.fs.categories().length   ? this.fs.categories()   : null,
+        categoryIds:   this.fs.categories().length   ? this.fs.categories()   : null,
         search:     this.fs.search() || null,
         page:       this.fs.pageIndex() + 1,
         limit:      this.fs.pageSize()

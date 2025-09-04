@@ -12,7 +12,7 @@
     [attr.alt]="video?.title"
     class="w-100 object-cover"
     height="300"
-    [src]="video?.thumbnailUrl"
+    [src]="video.thumbnailUrl"
     loading="lazy"
     decoding="async"
   />
@@ -29,20 +29,30 @@
         </span>
       </div>
       <div class="col text-end">
-        <span>{{ video?.categories?.[0]?.name || 'Uncategorized' }}</span>
+        @if(video && video.categories&& video.categories.length> 0){ @for(c
+        of video.categories; track c ){
+        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-4 me-1">
+          {{ c.name }}
+        </span>
+        } } @else{ noCategory }
+        <ng-template #noCategory>
+          <span>Uncategorized</span>
+        </ng-template>
       </div>
     </div>
 
     <div class="text-center text-align-top">
-     <button
-  type="button"
-  class="btn btn-dark text-white w-100 py-1 rounded-pill mt-3"
-  [routerLink]="['/videos', video?.id]"
-  (click)="$event.stopPropagation()"
->
-  <mat-icon class="pt-2" style="overflow: hidden !important;">play_arrow</mat-icon>
-  <span class="pb-2">Watch & Learn</span>
-</button>
+      <button
+        type="button"
+        class="btn btn-dark text-white w-100 py-1 rounded-pill mt-3"
+        [routerLink]="['/videos', video?.id]"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon class="pt-2" style="overflow: hidden !important"
+          >play_arrow</mat-icon
+        >
+        <span class="pb-2">Watch & Learn</span>
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

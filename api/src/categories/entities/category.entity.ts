@@ -11,6 +11,6 @@ export class Category {
 
     @ManyToMany(()=> Video, (video)=>video.categories)
     @JoinTable({name:'video_categories'})
-    videoss: Video[];
+    videos: Video[];
 
 }

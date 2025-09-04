@@ -42,7 +42,7 @@ export class Video {
     @Column({ default: 0 })
     views: number;
 
-    @ManyToMany(() => Category, (category) => category.videoss)
+    @ManyToMany(() => Category, (category) => category.videos)
     categories: Category[];
 
 }

@@ -35,5 +35,5 @@ export class Home implements OnInit {
   getCategoryNames(video: Video) {
     return  video.categories?.map(c => c.name).join(', ') || ''
   }
-  
+
 }

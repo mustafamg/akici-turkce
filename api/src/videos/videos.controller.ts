@@ -9,7 +9,7 @@ import { GetVideoDto } from './dto/get-video.dto';
 export class VideosController {
   constructor(private readonly videosService: VideosService) {}
 
-  // Admin Dashboard -- Add Videos
+  
   @Post()
   create(@Body(ValidationPipe) createVideoDto: CreateVideoDto) {
     return this.videosService.create(createVideoDto);

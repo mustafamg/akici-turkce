@@ -2,7 +2,7 @@
   <mat-select multiple [value]="selected" (valueChange)="onChange($event)">
     <mat-select-trigger>
       <span [class.placeholder]="!selected?.length">
-        {{ selected?.length ? selectedLabels() : 'Categories' }}
+      {{ selected?.length ? selectedLabels() : 'Categories' }}
       </span>
     </mat-select-trigger>
 
