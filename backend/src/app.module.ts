@@ -4,8 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { Video } from './videos/video.entity';
 import { VideosModule } from './videos/videos.module';
+import { Video } from './videos/video.entity';
+import { YtSearchModule } from './yt-search/yt-search.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { VideosModule } from './videos/videos.module';
     }),
     ThrottlerModule.forRoot([{ ttl: 60, limit: 60 }]),
     VideosModule,
+    YtSearchModule,
   ],
 })
 export class AppModule {}

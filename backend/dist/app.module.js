@@ -13,8 +13,9 @@ const typeorm_1 = require("@nestjs/typeorm");
 const cache_manager_1 = require("@nestjs/cache-manager");
 const cache_manager_redis_yet_1 = require("cache-manager-redis-yet");
 const throttler_1 = require("@nestjs/throttler");
-const video_entity_1 = require("./videos/video.entity");
 const videos_module_1 = require("./videos/videos.module");
+const video_entity_1 = require("./videos/video.entity");
+const yt_search_module_1 = require("./yt-search/yt-search.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +46,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             throttler_1.ThrottlerModule.forRoot([{ ttl: 60, limit: 60 }]),
             videos_module_1.VideosModule,
+            yt_search_module_1.YtSearchModule,
         ],
     })
 ], AppModule);
