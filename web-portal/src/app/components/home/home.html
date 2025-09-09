@@ -1,0 +1,103 @@
+
+<!-- Hero Section -->
+<section class="position-relative bg-gradient-secondary py-5 py-md-5 text-white text-center shadow-inset overflow-hidden">
+    <div class="position-absolute w-100 h-100 opacity-10 bg-pattern"></div>
+    <div class="position-relative z-1 container px-3 mx-auto max-width-768">
+    <h1 class="display-4 display-md-2 fw-bolder mb-3 animate-fade-in-down">
+        Learn Turkish with<br>Real YouTube Videos 🚀
+    </h1>
+    <p class="lead mb-4 opacity-90 animate-fade-in-up">
+        Immerse yourself in authentic Turkish content. Watch, learn, and master Turkish through interactive videos with clickable transcripts and personalized vocabulary tools.
+    </p>
+    <button mat-raised-button color="primary" class="btn btn-light text-secondary btn-lg px-5 py-3 rounded-pill shadow-lg hover-shadow-xl transition-all duration-300 transform hover-scale-105 animate-bounce-in">
+        Start Learning Today!
+    </button>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 py-md-5 bg-light">
+    <div class="container px-3 text-center">
+        <h2 class="fs-2 fs-md-1 fw-bold text-dark mb-4 animate-slide-in-right">Why Choose Us?</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-md-4">
+            <!-- Feature Card 1 -->
+            <div class="col">
+                <mat-card class="card h-100 d-flex flex-column align-items-center p-4 rounded-3 shadow-sm hover-shadow-lg transition-all duration-300 transform hover-translate-y-n2 bg-white border border-primary-light animate-zoom-in">
+                    <mat-icon class="text-info fs-1 mb-3">play_circle</mat-icon>
+                    <mat-card-title class="fs-5 fw-semibold mb-2 text-dark">Interactive Videos</mat-card-title>
+                    <mat-card-content class="text-muted text-center">
+                        Click on any word in the transcript to get instant translations and add to your vocabulary deck.
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <!-- Feature Card 2 -->
+            <div class="col">
+                <mat-card class="card h-100 d-flex flex-column align-items-center p-4 rounded-3 shadow-sm hover-shadow-lg transition-all duration-300 transform hover-translate-y-n2 bg-white border border-success-light animate-zoom-in delay-100">
+                    <mat-icon class="text-info fs-1 mb-3">book</mat-icon>
+                    <mat-card-title class="fs-5 fw-semibold mb-2 text-dark">Smart Flashcards</mat-card-title>
+                    <mat-card-content class="text-muted text-center">
+                        Build your personal vocabulary deck and review words with our intelligent flashcard system.
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <!-- Feature Card 3 -->
+            <div class="col">
+                <mat-card class="card h-100 d-flex flex-column align-items-center p-4 rounded-3 shadow-sm hover-shadow-lg transition-all duration-300 transform hover-translate-y-n2 bg-white border border-info-light animate-zoom-in delay-200">
+                    <mat-icon class="text-info fs-1 mb-3">groups</mat-icon>
+                    <mat-card-title class="fs-5 fw-semibold mb-2 text-dark">Authentic Content</mat-card-title>
+                    <mat-card-content class="text-muted text-center">
+                        Learn from real Turkish speakers with content ranging from vlogs to documentaries.
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Call to Action Section -->
+<section class="py-3 px-3 shadow-lg">
+    <h2 class="fs-2 fs-md-1 fw-bold mb-3 animate-fade-in-left">Featured Videos</h2>
+    <div class="row px-5 py-2">
+        <!-- Feature Card 1 -->
+         @for(video of videos; track video){
+            <div class="col-sm-3 col-12">
+                <mat-card class="card h-100 d-flex flex-column py-4 rounded-3 shadow-sm hover-shadow-lg bg-white border border-primary-light">
+                    <img [alt]="video.title" class="w-100 object-cover" height=300 [src]="video.src">
+                    <h3 class="font-semibold text-lg mb-2 line-clamp-2 text-center py-2">{{video.title}}</h3>
+                    <mat-card-content class="text-muted">
+                    <div class="row">
+                        <div class="col text-start">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-4">{{video.level}}</span>
+                        </div>
+                        <div class="col text-end">
+                            <span>{{video.type}}</span>
+                        </div>
+                    </div>
+                    <div class="text-center text-align-top">
+                        <button mat-button color="primary" class="btn btn-dark text-white w-100 py-1 rounded-pill mt-3">
+                            <mat-icon class="pt-2" style="overflow: hidden !important;">play_arrow</mat-icon> <span class="pb-2">Watch & Learn</span>
+                        </button>
+                    </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="bg-blue py-5 py-md-5 text-white text-center shadow-lg rounded-top-3">
+    <div class="container px-3 mx-auto max-width-576">
+        <h2 class="fs-2 fs-md-1 fw-bold mb-3 animate-fade-in-left">Ready to Master Turkish?</h2>
+        <p class="lead mb-4 opacity-90 animate-fade-in-right">
+            Join thousands of learners who are improving their Turkish with authentic video content.
+        </p>
+        <button mat-flat-button color="accent" class="btn btn-light text-teal btn-lg px-5 py-3 rounded-pill shadow-xl hover-shadow-2xl transition-all duration-300 transform hover-scale-105 animate-bounce-in">
+            Explore Courses
+        </button>
+    </div>
+</section>

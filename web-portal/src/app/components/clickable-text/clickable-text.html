@@ -1,0 +1,20 @@
+<span class="transcript-line">
+  <ng-container *ngFor="let part of lineParts; trackBy: trackByPart">
+    <button
+      *ngIf="isWord(part); else nonWord"
+      type="button"
+      class="transcript-word"
+      (click)="selectWord(part)"
+      aria-label="Select word {{ part }}">
+      {{ part }}
+    </button>
+    <ng-template #nonWord>
+      <span 
+        *ngIf="isSpace(part); else punctuation"
+        class="transcript-space">{{ part }}</span>
+      <ng-template #punctuation>
+        <span class="transcript-punctuation">{{ part }}</span>
+      </ng-template>
+    </ng-template>
+  </ng-container>
+</span>
